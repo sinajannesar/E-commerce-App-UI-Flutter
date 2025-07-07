@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
-import 'screens/home/home_screen.dart';
-import 'screens/details/details_screen.dart';
-import 'models/temp.dart';
+import 'package:provider/provider.dart';
+
+// Core and Services
+import 'core/theme.dart';
+import 'services/auth_service.dart';
+
+// Screens
+import 'presentation/screens/splash_screen.dart';
+import 'presentation/screens/login_screen.dart';
+import 'presentation/screens/main_wrapper.dart';
+import 'presentation/screens/profile/edit_profile_screen.dart';
+import 'presentation/screens/admin/admin_dashboard_screen.dart';
+
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    // Make the AuthService available throughout the app
+    ChangeNotifierProvider(
+      create: (context) => AuthService(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,27 +29,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'CourseApp',
+      theme: AppTheme.theme,
       debugShowCheckedModeBanner: false,
-      title: 'E-Commerce App',
-      initialRoute: '/',
-      onGenerateRoute: (RouteSettings settings) {
-        if (settings.name == '/') {
-          return MaterialPageRoute(builder: (_) => const HomeScreen());
-        }
-
-        if (settings.name == '/details') {
-          final product = settings.arguments as Product;
-          return MaterialPageRoute(
-            builder: (_) => DetailsScreen(product: product),
-          );
-        }
-
-        // fallback route
-        return MaterialPageRoute(
-          builder: (_) => const Scaffold(
-            body: Center(child: Text('Page not found')),
-          ),
+      // Set text direction to right-to-left for Persian
+      builder: (context, child) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: child!,
         );
+      },
+      // The first page to be displayed
+      home: const SplashScreen(),
+      // Define named routes for clean navigation
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/main': (context) => const MainWrapper(),
+        '/edit-profile': (context) => const EditProfileScreen(),
+        '/admin-dashboard': (context) => const AdminDashboardScreen(),
       },
     );
   }
