@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../constants.dart';
-
-import '../../models/product.dart';
-import '../details/details_screen.dart';
+import '../../models/temp.dart';
 import 'components/categorries.dart';
 import 'components/item_card.dart';
 
@@ -35,7 +33,7 @@ class HomeScreen extends StatelessWidget {
             ),
             onPressed: () {},
           ),
-          const SizedBox(width: kDefaultPaddin / 2)
+          const SizedBox(width: kDefaultPaddin / 2),
         ],
       ),
       body: Column(
@@ -65,13 +63,10 @@ class HomeScreen extends StatelessWidget {
                 ),
                 itemBuilder: (context, index) => ItemCard(
                   product: products[index],
-                  press: () => Navigator.push(
+                  press: () => Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailsScreen(
-                        product: products[index],
-                      ),
-                    ),
+                    '/details',
+                    arguments: products[index],
                   ),
                 ),
               ),

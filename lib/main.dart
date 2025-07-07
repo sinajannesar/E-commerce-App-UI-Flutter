@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'constants.dart';
 import 'screens/home/home_screen.dart';
+import 'screens/details/details_screen.dart';
+import 'models/temp.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,17 +10,31 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'The Flutter Way',
-      theme: ThemeData(
-        textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const HomeScreen(),
+      title: 'E-Commerce App',
+      initialRoute: '/',
+      onGenerateRoute: (RouteSettings settings) {
+        if (settings.name == '/') {
+          return MaterialPageRoute(builder: (_) => const HomeScreen());
+        }
+
+        if (settings.name == '/details') {
+          final product = settings.arguments as Product;
+          return MaterialPageRoute(
+            builder: (_) => DetailsScreen(product: product),
+          );
+        }
+
+        // fallback route
+        return MaterialPageRoute(
+          builder: (_) => const Scaffold(
+            body: Center(child: Text('Page not found')),
+          ),
+        );
+      },
     );
   }
 }
