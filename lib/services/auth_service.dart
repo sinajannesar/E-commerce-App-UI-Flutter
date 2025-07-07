@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../core/mock_data.dart';
 import '../models/user_model.dart';
 
-// این کلاس وضعیت لاگین کاربر را در کل برنامه مدیریت می‌کند.
 class AuthService extends ChangeNotifier {
   User? _currentUser;
   User? get currentUser => _currentUser;
@@ -10,18 +9,24 @@ class AuthService extends ChangeNotifier {
   bool get isLoggedIn => _currentUser != null;
   bool get isAdmin => _currentUser?.role == UserRole.admin;
 
-  // متد برای لاگین کردن کاربر
-  void login(UserRole role) {
-    if (role == UserRole.admin) {
+  // FIX: Updated login method to use credentials.
+  // We'll check if the email matches our mock admin email.
+  void login(String name, String email) {
+    if (email.toLowerCase() == MockData.adminUser.email) {
       _currentUser = MockData.adminUser;
     } else {
-      _currentUser = MockData.studentUser;
+      // For any other user, create a new student user object.
+      _currentUser = User(
+        id: 'student-${DateTime.now().millisecondsSinceEpoch}',
+        name: name,
+        email: email,
+        role: UserRole.student,
+        avatarUrl: 'https://i.pravatar.cc/150?u=$email', // Avatar based on email
+      );
     }
-    // به تمام ویجت‌هایی که به این کلاس گوش می‌دهند، اطلاع‌رسانی می‌کند.
     notifyListeners();
   }
 
-  // متد برای خروج کاربر
   void logout() {
     _currentUser = null;
     notifyListeners();

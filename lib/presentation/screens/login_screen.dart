@@ -1,66 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../models/user_model.dart';
 import '../../services/auth_service.dart';
 import '../../core/theme.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context, listen: false);
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+
+  void _submit() {
+    // First, validate the form.
+    if (_formKey.currentState!.validate()) {
+      final authService = Provider.of<AuthService>(context, listen: false);
+      // Call the login method with the text from the controllers.
+      authService.login(
+        _nameController.text,
+        _emailController.text,
+      );
+      Navigator.of(context).pushReplacementNamed('/main');
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       body: Center(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(32.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Icon(Icons.school_rounded,
-                  color: AppTheme.primaryColor, size: 80),
-              const SizedBox(height: 16),
-              Text(
-                'به CourseApp خوش آمدید',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'نقش خود را برای ورود انتخاب کنید',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const SizedBox(height: 48),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.person_outline),
-                label: const Text('ورود به عنوان دانشجو'),
-                onPressed: () {
-                  authService.login(UserRole.student);
-                  Navigator.of(context).pushReplacementNamed('/main');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryColor,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Icon(Icons.school_rounded, color: AppTheme.primaryColor, size: 80),
+                const SizedBox(height: 16),
+                Text(
+                  'به CourseApp خوش آمدید',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.displayLarge,
                 ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.admin_panel_settings_outlined),
-                label: const Text('ورود به عنوان ادمین'),
-                onPressed: () {
-                  authService.login(UserRole.admin);
-                  Navigator.of(context).pushReplacementNamed('/main');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: AppTheme.primaryColor,
-                  side: const BorderSide(color: AppTheme.primaryColor),
+                const SizedBox(height: 48),
+                // Name field
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'نام شما',
+                    prefixIcon: Icon(Icons.person_outline),
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'لطفاً نام خود را وارد کنید';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                // Email field
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'ایمیل',
+                    hintText: 'برای ورود ادمین: admin@courseapp.com',
+                    prefixIcon: Icon(Icons.email_outlined),
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty || !value.contains('@')) {
+                      return 'لطفاً یک ایمیل معتبر وارد کنید';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: _submit,
+                  child: const Text('ورود'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
