@@ -1,10 +1,8 @@
-// lib/presentation/common_widgets/course_card.dart
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../core/theme.dart';
 import '../../models/course_model.dart';
 
-// A beautiful card to display course information in lists
 class CourseCard extends StatelessWidget {
   final Course course;
   final VoidCallback onTap;
@@ -26,7 +24,6 @@ class CourseCard extends StatelessWidget {
                 course.imageUrl,
                 height: 180,
                 fit: BoxFit.cover,
-                // Add error and loading builders for robustness
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return const SizedBox(
@@ -34,7 +31,12 @@ class CourseCard extends StatelessWidget {
                     child: Center(child: CircularProgressIndicator()),
                   );
                 },
+                
                 errorBuilder: (context, error, stackTrace) {
+                  // This will print the error to your debug console
+                  if (kDebugMode) {
+                    print('Image Load Error: $error');
+                  }
                   return const SizedBox(
                     height: 180,
                     child: Icon(Icons.broken_image, size: 40, color: Colors.grey),
@@ -53,7 +55,7 @@ class CourseCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Mدرس: ${course.instructor}',
+                    'مدرس: ${course.instructor}',
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 16),

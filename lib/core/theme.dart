@@ -15,11 +15,11 @@ class AppTheme {
       primaryColor: primaryColor,
       scaffoldBackgroundColor: backgroundColor,
       fontFamily: GoogleFonts.lato().fontFamily,
-      appBarTheme: const AppBarTheme( // ✅ FIX: Added 'const'
+      appBarTheme: const AppBarTheme( 
         backgroundColor: primaryColor,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: TextStyle( // Note: GoogleFonts can't be const, so TextStyle is used here.
+        titleTextStyle: TextStyle( 
           color: Colors.white,
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -32,7 +32,7 @@ class AppTheme {
         unselectedItemColor: Colors.grey[500],
         type: BottomNavigationBarType.fixed,
       ),
-      cardTheme: CardThemeData( // ✅ FIX: Changed CardTheme to CardThemeData
+      cardTheme: CardThemeData( 
         elevation: 4,
         color: cardColor,
         shape: RoundedRectangleBorder(

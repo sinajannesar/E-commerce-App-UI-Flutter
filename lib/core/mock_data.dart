@@ -25,7 +25,6 @@ class MockData {
       id: 'c1',
       title: 'آموزش جامع فلاتر ۲۰۲۵',
       instructor: 'محمد اکبری',
-      // ✅ FIX: Using a reliable placeholder image URL
       imageUrl: 'https://placehold.co/600x400/6a1b9a/white?text=Flutter',
       duration: '۴۵ ساعت',
       price: 250000,
@@ -35,7 +34,6 @@ class MockData {
       id: 'c2',
       title: 'اصول طراحی UI/UX',
       instructor: 'سارا احمدی',
-      // ✅ FIX: Using a reliable placeholder image URL
       imageUrl: 'https://placehold.co/600x400/7b1fa2/white?text=UI/UX',
       duration: '۲۰ ساعت',
       price: 180000,
